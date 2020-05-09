@@ -1,5 +1,75 @@
 <html>
-<body style='background-color:#333;'>
-Hello World.
+<head>
+    <style>
+        body {
+            background-color:#fdfbfb;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            margin:0;
+            padding:0;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size:18px;
+            line-height:20px;
+        }
+        img.image {
+            width:300px;
+            height:300px;
+            object-fit: contain;
+        }
+        div.description {
+            margin:20px;
+            max-width:400px;
+            min-width:200px;
+            color:#333;
+        }
+        div.container {
+            width:100%;
+            max-width:900px;
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:space-evenly;
+            align-items:center;
+            color:#eee;
+            align-items:center;
+            margin:50px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="header" style="background-color:#333;width:100%;display:flex;justify-content:center;">
+        <div class="container">
+            <img class="image" src="logo.png"/>
+            <div class="description" style="color:#eee;">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="container">
+            <img class="image" src="plots.png"/>
+            <div class="description">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </div>
+        </div>
+        <div class="container">
+            <img class="image" src="speed.png"/>
+            <div class="description">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </div>
+        </div>
+        <div class="container">
+            <img class="image" src="export.png"/>
+            <div class="description">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </div>
+        </div>
+    </div>
+    <div id="footer" style="background-color:#333;width:100%;display:flex;justify-content:center;">
+        <div class="container">
+            Contact us: dropsortcompany@gmail.com
+        </div>
+    </div>
 </body>
 </html>
