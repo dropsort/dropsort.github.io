@@ -10,7 +10,7 @@
             padding:0;
             font-family: 'Josefin Sans', sans-serif;
             font-size:18px;
-            line-height:20px;
+            line-height:24px;
         }
         img.image {
             width:300px;
@@ -32,42 +32,80 @@
             align-items:center;
             color:#eee;
             align-items:center;
-            margin:50px;
+            margin:20px;
+        }
+        h1 {
+            margin-bottom:50px;
+        }
+        a {
+            color:#333;
+        }
+        img.gallery {
+            width:300px;
+            height:300px;
+            object-fit: contain;
+            margin:30px;
+            cursor:pointer;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="closeup" onclick="this.style.display='none';" style="display:none;z-index:1;position:fixed;top:0px;bottom:0px;left:0px;right:0px;background-color:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
+        <img id="closeup_src" style="max-width:80%;max-height:80%;transform:scale(0.9)"/>
+    </div>
     <div id="header" style="background-color:#333;width:100%;display:flex;justify-content:center;">
         <div class="container">
             <img class="image" src="logo.png"/>
             <div class="description" style="color:#eee;">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                DropSort brings the world of Fluorescent Activated Sorting to microfluidic droplet devices. All you need is a microscope and a microfluidic sorter chip, and we provide all the comfort you are used from cell based sorting.
             </div>
         </div>
     </div>
     <div class="container">
-        <div class="container">
-            <img class="image" src="plots.png"/>
-            <div class="description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </div>
+        <img class="image" src="plots.png"/>
+        <div class="description">
+            <h1>Flexible Gating</h1>
+            DropSort features arbitrary shape four-point gating and threshold-based gating in histogram views. Gates can be nested hierarchically with up to three sub-gates. Each gate is fully configurable with all channels.
         </div>
-        <div class="container">
-            <img class="image" src="speed.png"/>
-            <div class="description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </div>
+    </div>
+    <div class="container">
+        <img class="image" src="speed.png"/>
+        <div class="description">
+            <h1>For Every Need</h1>
+            We support up to three fluorescent channels and droplet length to be gated on. Each channel has a sampling rate of 100 kHz and an input range of 0-1V.
         </div>
-        <div class="container">
-            <img class="image" src="export.png"/>
-            <div class="description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </div>
+    </div>
+    <div class="container">
+        <img class="image" src="export.png"/>
+        <div class="description">
+            <h1>Easy Integration</h1>
+            Your data is exported into the Flow Cytometry Standard (.fcs) file format for easy integration into your downstream processing pipeline. Annotation templates let you save comments and acquisition parameters of your setup with each experiment.
+        </div>
+    </div>
+    <div class="container">
+        <img class="image" src="setup.png"/>
+        <div class="description">
+            <h1>How does it work?</h1>
+            We will provide you with an acquisition card and our DropSort 2020 software (Windows 10, MacOS, Linux. Ethernet port required). All you need to do is to plug your PMTs into the acquisition card and wire up your microfluidic chip&#42;. We will support you with the setup. </br></br>&#42;<span style="font-size:0.8em;">Depending on your setup this might require an external amplifier and function generator</span>
+        </div>
+    </div>
+    <div class="container">
+        <img class="image" src="price.png"/>
+        <div class="description">
+            <h1>Pricing</h1>
+            <a href= "mailto:dropsortcompany@gmail.com?subject=DropSort Quote Request&body=Hi! I would like to get an offer for DropSort.">Get in touch with us</a> to request a quote. We are open to feature requests or customizations based on your experiments. Happy to hear from you!
+        </div>
+    </div>
+    <div id="gallery" style="background-color:#ccc;width:100%;display:flex;justify-content:center;">
+        <div class="container" style="display:flex;max-width:none;margin-top:50px;margin-bottom:50px;">
+            <img class="gallery" onclick="document.getElementById('closeup').style.display = 'flex';document.getElementById('closeup_src').src = 'gallery1.png';" src="gallery1.png"/>
+            <img class="gallery" onclick="document.getElementById('closeup').style.display = 'flex';document.getElementById('closeup_src').src = 'gallery2.png';" src="gallery2.png"/>
+            <img class="gallery" onclick="document.getElementById('closeup').style.display = 'flex';document.getElementById('closeup_src').src = 'gallery3.png';" src="gallery3.png"/>
         </div>
     </div>
     <div id="footer" style="background-color:#333;width:100%;display:flex;justify-content:center;">
-        <div class="container">
+        <div class="container" style="padding:20px;">
             Contact us: dropsortcompany@gmail.com
         </div>
     </div>
