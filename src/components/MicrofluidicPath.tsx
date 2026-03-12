@@ -89,7 +89,7 @@ export default function MicrofluidicPath() {
 
   const generate = useCallback((w: number, H: number) => {
     const cx = (document.documentElement.clientWidth || w) / 2;
-    const cw = Math.max(10, Math.min(22, w * 0.014)) * 1.8;
+    const cw = Math.min(20, Math.max(10, Math.min(22, w * 0.014)) * 1.8);
     const tiny = w < 500;
 
     const mainEl = document.querySelector("main");

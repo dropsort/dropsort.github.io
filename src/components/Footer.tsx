@@ -46,9 +46,15 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-6 border-t border-border/30">
             {/* Legal links */}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted/60">
-              <span className="hover:text-muted transition-colors cursor-pointer">Terms</span>
-              <span className="hover:text-muted transition-colors cursor-pointer">Privacy</span>
-              <span className="hover:text-muted transition-colors cursor-pointer">Imprint</span>
+              <a href="/documentation/terms/" className="hover:text-muted transition-colors">
+                Terms
+              </a>
+              <a href="/documentation/privacy/" className="hover:text-muted transition-colors">
+                Privacy
+              </a>
+              <a href="/documentation/imprint/" className="hover:text-muted transition-colors">
+                Imprint
+              </a>
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-xs text-muted/50">
