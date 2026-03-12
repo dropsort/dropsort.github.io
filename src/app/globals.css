@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #FAFBFC;
+  --color-foreground: #111827;
+  --color-muted: #6B7280;
+  --color-border: #E5E7EB;
+  --color-card: #FFFFFF;
+  --color-card-hover: #F9FAFB;
+  --color-brand: #E91E63;
+  --color-brand-light: #F06292;
+  --color-brand-dim: #E91E6318;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D1D5DB transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+}
+
+.font-logo {
+  font-family: var(--font-afacad), var(--font-sans), system-ui, -apple-system, sans-serif !important;
+}
+
+::selection {
+  background: #E91E6330;
+  color: #111;
+}
+
+.text-backdrop {
+  background-color: rgba(250, 251, 252, 0.5);
+  box-shadow: 0 0 24px 16px rgba(250, 251, 252, 0.5);
+  border-radius: 0.5rem;
+}
+
+.section-backdrop {
+  position: relative;
+  isolation: isolate;
+}
+.section-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: -1rem;
+  background: rgba(250, 251, 252, 0.82);
+  border-radius: 1rem;
+  z-index: -1;
+  pointer-events: none;
+  box-shadow: 0 0 40px 20px rgba(250, 251, 252, 0.82);
+}
+/* Last section: constrain inset and fade so it matches other sections */
+main > section:last-child .section-backdrop::before {
+  inset: -1rem -1rem 0 -1rem;
+  box-shadow: 0 0 24px 12px rgba(250, 251, 252, 0.82);
+}

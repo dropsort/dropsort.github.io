@@ -1,0 +1,17 @@
+site_name: DropSort Documentation
+nav:
+    - Setup Instructions: setup.md
+    - User Guide: userguide.md
+    - Terms and Conditions: terms.md
+    - Privacy Policy: privacy.md
+    - Imprint: imprint.md
+    #- EULA: eula.md
+    #- FAQ: faq.md
+theme:
+  name: material
+  palette:
+    scheme: default
+extra_css:
+  - stylesheets/extra.css
+markdown_extensions:
+  - attr_list
