@@ -247,7 +247,7 @@ export default function MicrofluidicPath() {
       generate(w, H);
     };
 
-    const poly = (pts: Pt[], color: string, lw: number) => {
+    const poly = (pts: Pt[], color: string, lw: number, cap: CanvasLineCap = "round") => {
       if (pts.length < 2) return;
       ctx.beginPath();
       ctx.moveTo(pts[0].x, pts[0].y);
@@ -255,7 +255,7 @@ export default function MicrofluidicPath() {
       ctx.strokeStyle = color;
       ctx.lineWidth = lw;
       ctx.lineJoin = "round";
-      ctx.lineCap = "round";
+      ctx.lineCap = cap;
       ctx.setLineDash([]);
       ctx.stroke();
     };
@@ -328,9 +328,9 @@ export default function MicrofluidicPath() {
         { x: picoSX, y: picoY },
         { x: picoNarrowX, y: picoY },
       ];
-      poly(picoFullPts, "rgba(233,30,99,0.018)", cw * 2.2);
-      poly(picoFullPts, "rgba(233,30,99,0.055)", cw);
-      poly(picoFullPts, "rgba(233,30,99,0.085)", 0.5);
+      poly(picoFullPts, "rgba(233,30,99,0.018)", cw * 2.2, "butt");
+      poly(picoFullPts, "rgba(233,30,99,0.055)", cw, "butt");
+      poly(picoFullPts, "rgba(233,30,99,0.085)", 0.5, "butt");
 
       // Narrowing section (cw → cw/3 near junction)
       const nw = cw / 3;
@@ -341,6 +341,13 @@ export default function MicrofluidicPath() {
       ctx.lineTo(cx + mhw, psy + nw / 2);
       ctx.lineTo(picoNarrowX, psy + mhw);
       ctx.closePath();
+      // Broad, very faint outer pass (matches channel double-stroke feel)
+      ctx.strokeStyle = "rgba(233,30,99,0.018)";
+      ctx.lineWidth = cw * 1.4;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "butt";
+      ctx.setLineDash([]);
+      ctx.stroke();
       ctx.fillStyle = "rgba(233,30,99,0.055)";
       ctx.fill();
       // Narrowing walls
