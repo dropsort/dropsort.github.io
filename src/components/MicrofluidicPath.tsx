@@ -175,7 +175,8 @@ export default function MicrofluidicPath() {
       e: mpd.cum[chIdx + 1] / mpd.len,
     };
 
-    const picoJuncT = mpd.cum[1] / mpd.len;
+    // Junction is at picoY (3rd main-path point after adding hero start segment).
+    const picoJuncT = mpd.cum[2] / mpd.len;
     const sortJuncT = mpd.cum[sortIdx] / mpd.len;
 
     // ═══ BRANCH A ═══
