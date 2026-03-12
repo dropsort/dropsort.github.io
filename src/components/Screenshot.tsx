@@ -26,7 +26,7 @@ export default function Screenshot() {
 
         <SectionReveal delay={0.15}>
           <div className="relative">
-            <div className="w-full overflow-hidden">
+            <div className="w-full max-w-5xl mx-auto overflow-hidden">
               <Image
                 src={screenshotPng}
                 alt="DropSort application screenshot"

@@ -42,10 +42,10 @@ export default function EmailLink({
 
   const mailtoHref = useMemo(() => {
     if (!email) return "#";
-    const params = new URLSearchParams();
-    if (subject) params.set("subject", subject);
-    if (body) params.set("body", body);
-    const query = params.toString();
+    const parts: string[] = [];
+    if (subject) parts.push(`subject=${encodeURIComponent(subject)}`);
+    if (body) parts.push(`body=${encodeURIComponent(body)}`);
+    const query = parts.join("&");
     return `mailto:${email}${query ? `?${query}` : ""}`;
   }, [email, subject, body]);
 
