@@ -8,7 +8,7 @@ const ease = [0.25, 0.46, 0.45, 0.94] as const;
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="relative z-10 mx-auto max-w-5xl px-6 lg:px-8 text-center pt-24 pb-20 section-backdrop">
+      <div className="relative z-10 mx-auto max-w-5xl px-6 lg:px-8 text-center pt-24 pb-20 section-backdrop hero-backdrop">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}

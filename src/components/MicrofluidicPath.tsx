@@ -91,7 +91,6 @@ export default function MicrofluidicPath() {
   const generate = useCallback((w: number, H: number) => {
     const cx = (document.documentElement.clientWidth || w) / 2;
     const cw = Math.min(20, Math.max(10, Math.min(22, w * 0.014)) * 1.8);
-    const tiny = w < 500;
 
     const mainEl = document.querySelector("main");
     if (!mainEl) return;
@@ -103,13 +102,10 @@ export default function MicrofluidicPath() {
     const gap = secBot.slice(0, -1);
     const gapH = py * 2;
 
-    // ─── HERO: three inlets merging (half-size inlets) ───
+    // ─── HERO: straight centered channel ───
     const heroH = secBot[0];
-    const heroMid = heroH * 0.45;
     const mergeY = heroH * 0.82;
-
-    const inletW = cw * 2.5;
-    const inletSpc = tiny ? cw * 4 : cw * 6;
+    const startY = heroH * 0.68;
 
     // ─── GAP 1: picoinjection ───
     const picoY = gap[0];
@@ -146,6 +142,7 @@ export default function MicrofluidicPath() {
 
     // ═══ MAIN PATH ═══
     const m: Pt[] = [];
+    m.push({ x: cx, y: startY });
     m.push({ x: cx, y: mergeY });
     m.push({ x: cx, y: picoY });
     m.push({ x: cx, y: serp1Start });
@@ -199,14 +196,14 @@ export default function MicrofluidicPath() {
     const juncDist = picoY - mergeY;
 
     geoRef.current = {
-      cx, cw, inletW, inletSpc, heroMid, mergeY,
+      cx, cw, mergeY,
       picoY, picoSX, picoNarrowX, juncDist,
       picoJuncT, sortJuncT, branchLen: baPD.len,
       serpHS, serpTR,
       juncY, bOff, divLen,
       branchEndY, mergeToCenterY,
       chamberTop, chHW, chExp, chBody, chCon, chBotY,
-      exitY, tiny, py,
+      exitY, py,
     };
   }, []);
 
@@ -294,14 +291,13 @@ export default function MicrofluidicPath() {
       }
 
       const {
-        cx, cw, inletW, inletSpc, heroMid, mergeY,
+        cx, cw,
         picoY, picoSX, picoNarrowX, juncDist,
         juncY, bOff, divLen, branchEndY,
         chamberTop, chHW, chExp, chBody, chBotY,
-        exitY, tiny,
+        exitY,
       } = g;
       const Y = (v: number) => v;
-      const hw = inletW / 2;
       const mhw = cw / 2;
 
       // Only rasterize primitives in/near the visible viewport band.
@@ -309,43 +305,6 @@ export default function MicrofluidicPath() {
       ctx.beginPath();
       ctx.rect(0, viewTop, w, viewH);
       ctx.clip();
-
-      // ═══ THREE INLETS (half-size, fading in from top) ═══
-      const signs = tiny ? [0] : [-1, 0, 1];
-      for (const s of signs) {
-        const ix = cx + s * inletSpc;
-        ctx.beginPath();
-        ctx.moveTo(ix - hw, Y(0));
-        ctx.lineTo(ix - hw, Y(heroMid));
-        ctx.lineTo(cx - mhw, Y(mergeY));
-        ctx.lineTo(cx + mhw, Y(mergeY));
-        ctx.lineTo(ix + hw, Y(heroMid));
-        ctx.lineTo(ix + hw, Y(0));
-        ctx.closePath();
-        ctx.fillStyle = "rgba(233,30,99,0.02)";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(ix - hw, Y(0));
-        ctx.lineTo(ix - hw, Y(heroMid));
-        ctx.lineTo(cx - mhw, Y(mergeY));
-        ctx.moveTo(ix + hw, Y(0));
-        ctx.lineTo(ix + hw, Y(heroMid));
-        ctx.lineTo(cx + mhw, Y(mergeY));
-        ctx.strokeStyle = "rgba(233,30,99,0.06)";
-        ctx.lineWidth = 0.8;
-        ctx.lineJoin = "miter";
-        ctx.lineCap = "square";
-        ctx.setLineDash([]);
-        ctx.stroke();
-      }
-
-      // Fade-out gradient at top so inlets appear gradually
-      const fadeH = heroMid * 0.6;
-      const fadeGrad = ctx.createLinearGradient(0, Y(0), 0, Y(fadeH));
-      fadeGrad.addColorStop(0, "rgba(250,251,252,1)");
-      fadeGrad.addColorStop(1, "rgba(250,251,252,0)");
-      ctx.fillStyle = fadeGrad;
-      ctx.fillRect(0, Y(0), w, fadeH);
 
       // ═══ MAIN CHANNEL ═══
       poly(mp.pts, "rgba(233,30,99,0.018)", cw * 2.2);

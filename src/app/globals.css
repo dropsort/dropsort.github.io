@@ -60,6 +60,15 @@ body {
   pointer-events: none;
   box-shadow: 0 0 40px 20px rgba(250, 251, 252, 0.82);
 }
+
+/* Hero-specific backdrop: shorter and softly faded at the bottom edge */
+.hero-backdrop.section-backdrop::before {
+  inset: -1rem -1rem 0rem -1rem;
+  box-shadow: 0 0 28px 14px rgba(250, 251, 252, 0.72);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%);
+}
+
 /* Last section: constrain inset and fade so it matches other sections */
 main > section:last-child .section-backdrop::before {
   inset: -1rem -1rem 0 -1rem;
