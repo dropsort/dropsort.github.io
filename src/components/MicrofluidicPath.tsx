@@ -6,6 +6,7 @@ interface Pt { x: number; y: number }
 interface Drop { progress: number; radius: number; opacity: number; sorted: boolean }
 
 const BASE_SPEED = 20;
+const MAX_DPR = 1.5;
 
 interface PD { pts: Pt[]; cum: number[]; len: number }
 
@@ -210,7 +211,7 @@ export default function MicrofluidicPath() {
   }, []);
 
   const initDroplets = useCallback((w: number) => {
-    const n = w < 480 ? 28 : w < 768 ? 44 : w < 1024 ? 60 : 76;
+    const n = w < 480 ? 19 : w < 768 ? 29 : w < 1024 ? 40 : 51;
     mainDrops.current = Array.from({ length: n }, (_, i) => ({
       progress: i / n,
       radius: 2.5 + Math.random() * 2.5,
@@ -226,8 +227,8 @@ export default function MicrofluidicPath() {
     if (!ctx) return;
 
     const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const w = window.innerWidth;
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      const w = document.documentElement.clientWidth || window.innerWidth;
       const vh = window.innerHeight;
       const H = document.documentElement.scrollHeight;
       const prev = dimsRef.current;
@@ -239,20 +240,20 @@ export default function MicrofluidicPath() {
       if (unchanged) return;
 
       canvas.width = w * dpr;
-      canvas.height = vh * dpr;
+      canvas.height = H * dpr;
       canvas.style.width = `${w}px`;
-      canvas.style.height = `${vh}px`;
+      canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       dprRef.current = dpr;
       dimsRef.current = { w, vh, H };
       generate(w, H);
     };
 
-    const poly = (pts: Pt[], sy: number, color: string, lw: number) => {
+    const poly = (pts: Pt[], color: string, lw: number) => {
       if (pts.length < 2) return;
       ctx.beginPath();
-      ctx.moveTo(pts[0].x, pts[0].y - sy);
-      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y - sy);
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
       ctx.strokeStyle = color;
       ctx.lineWidth = lw;
       ctx.lineJoin = "round";
@@ -262,8 +263,8 @@ export default function MicrofluidicPath() {
     };
 
     const drawReservoir = (x: number, yp: number, r: number, sy: number, vh: number) => {
-      const y = yp - sy;
-      if (y < -r * 3 || y > vh + r * 3) return;
+      const y = yp;
+      if (y < sy - r * 3 || y > sy + vh + r * 3) return;
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(233,30,99,0.03)";
@@ -279,12 +280,14 @@ export default function MicrofluidicPath() {
     };
 
     const draw = () => {
-      const { w, vh } = dimsRef.current;
+      const { w, vh, H } = dimsRef.current;
       const sy = window.scrollY;
       const mp = mainRef.current;
       const g = geoRef.current;
 
-      ctx.clearRect(0, 0, w, vh);
+      const viewTop = Math.max(0, sy - 140);
+      const viewH = Math.min(H - viewTop, vh + 280);
+      ctx.clearRect(0, viewTop, w, viewH);
       if (!g || mp.len === 0) {
         animRef.current = requestAnimationFrame(draw);
         return;
@@ -297,9 +300,15 @@ export default function MicrofluidicPath() {
         chamberTop, chHW, chExp, chBody, chBotY,
         exitY, tiny,
       } = g;
-      const Y = (v: number) => v - sy;
+      const Y = (v: number) => v;
       const hw = inletW / 2;
       const mhw = cw / 2;
+
+      // Only rasterize primitives in/near the visible viewport band.
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, viewTop, w, viewH);
+      ctx.clip();
 
       // ═══ THREE INLETS (half-size, fading in from top) ═══
       const signs = tiny ? [0] : [-1, 0, 1];
@@ -339,16 +348,16 @@ export default function MicrofluidicPath() {
       ctx.fillRect(0, Y(0), w, fadeH);
 
       // ═══ MAIN CHANNEL ═══
-      poly(mp.pts, sy, "rgba(233,30,99,0.018)", cw * 2.2);
-      poly(mp.pts, sy, "rgba(233,30,99,0.055)", cw);
-      poly(mp.pts, sy, "rgba(233,30,99,0.085)", 0.5);
+      poly(mp.pts, "rgba(233,30,99,0.018)", cw * 2.2);
+      poly(mp.pts, "rgba(233,30,99,0.055)", cw);
+      poly(mp.pts, "rgba(233,30,99,0.085)", 0.5);
 
       // ═══ BRANCH A ═══
       const ba = branchRef.current;
       if (ba.len > 0) {
-        poly(ba.pts, sy, "rgba(233,30,99,0.018)", cw * 2.2);
-        poly(ba.pts, sy, "rgba(233,30,99,0.055)", cw);
-        poly(ba.pts, sy, "rgba(233,30,99,0.085)", 0.5);
+        poly(ba.pts, "rgba(233,30,99,0.018)", cw * 2.2);
+        poly(ba.pts, "rgba(233,30,99,0.055)", cw);
+        poly(ba.pts, "rgba(233,30,99,0.085)", 0.5);
         const op = ba.pts[ba.pts.length - 1];
         drawReservoir(op.x, op.y, cw * 2, sy, vh);
       }
@@ -359,9 +368,9 @@ export default function MicrofluidicPath() {
         { x: picoSX, y: picoY },
         { x: picoNarrowX, y: picoY },
       ];
-      poly(picoFullPts, sy, "rgba(233,30,99,0.018)", cw * 2.2);
-      poly(picoFullPts, sy, "rgba(233,30,99,0.055)", cw);
-      poly(picoFullPts, sy, "rgba(233,30,99,0.085)", 0.5);
+      poly(picoFullPts, "rgba(233,30,99,0.018)", cw * 2.2);
+      poly(picoFullPts, "rgba(233,30,99,0.055)", cw);
+      poly(picoFullPts, "rgba(233,30,99,0.085)", 0.5);
 
       // Narrowing section (cw → cw/3 near junction)
       const nw = cw / 3;
@@ -471,8 +480,8 @@ export default function MicrofluidicPath() {
         { x: cx + chHW, y: chConStart },
         { x: cx + mhw, y: chBotY },
       ];
-      poly(leftWall, sy, "rgba(233,30,99,0.085)", 0.5);
-      poly(rightWall, sy, "rgba(233,30,99,0.085)", 0.5);
+      poly(leftWall, "rgba(233,30,99,0.085)", 0.5);
+      poly(rightWall, "rgba(233,30,99,0.085)", 0.5);
 
       // Dividers (lighter than chamber)
       const divOff = chHW * 0.4;
@@ -563,14 +572,14 @@ export default function MicrofluidicPath() {
             fade = Math.max(0, 1 - holdT);
           }
 
-          const yy = pos.y - sy;
-          if (yy < -30 || yy > vh + 30) continue;
+          const yy = pos.y;
+          if (yy < sy - 30 || yy > sy + vh + 30) continue;
           drawDrop(pos.x, yy, d.radius, cr, cg, cb, dropOp * fade);
         } else {
           // Before junction or sorted → draw on main path
           const pos = sample(mp, d.progress);
-          const yy = pos.y - sy;
-          if (yy < -30 || yy > vh + 30) continue;
+          const yy = pos.y;
+          if (yy < sy - 30 || yy > sy + vh + 30) continue;
           drawDrop(pos.x, yy, d.radius, cr, cg, cb, dropOp);
         }
       }
@@ -583,8 +592,8 @@ export default function MicrofluidicPath() {
           const picoT = 1 - toJunc / picoJuncT;
           if (picoT < 0.01) continue;
           const pos = sample(ppd, picoT);
-          const ppy = pos.y - sy;
-          if (ppy < -30 || ppy > vh + 30) continue;
+          const ppy = pos.y;
+          if (ppy < sy - 30 || ppy > sy + vh + 30) continue;
           const pr = d.radius * 0.5;
           const mergeFade = picoT > 0.96 ? (1 - picoT) / 0.04 : 1;
           drawDrop(pos.x, ppy, pr, 233, 30, 99, d.opacity * Math.max(0, mergeFade));
@@ -598,6 +607,8 @@ export default function MicrofluidicPath() {
       fadeBotGrad.addColorStop(1, "rgba(250,251,252,1)");
       ctx.fillStyle = fadeBotGrad;
       ctx.fillRect(0, Y(exitY - fadeBotH), w, fadeBotH);
+
+      ctx.restore();
 
       animRef.current = requestAnimationFrame(draw);
     };
@@ -616,5 +627,5 @@ export default function MicrofluidicPath() {
     };
   }, [generate, initDroplets]);
 
-  return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-0" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="pointer-events-none absolute left-0 top-0 z-0" aria-hidden="true" />;
 }
